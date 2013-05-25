@@ -12,7 +12,7 @@
 
 @property (nonatomic, assign) NSInteger currentRay;
 @property (nonatomic, strong) NSTimer *animationTimer;
-@property (nonatomic, strong) dispatch_source_t animationQueue;
+@property (nonatomic, assign) dispatch_source_t animationQueue;
 @property (nonatomic, assign) BOOL isAnimating;
 
 @property (nonatomic, assign) CGFloat rayLength;
