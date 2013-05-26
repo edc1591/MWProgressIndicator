@@ -36,8 +36,6 @@
         self.isAnimating = NO;
         self.usesThreadedAnimation = YES;
         
-        self.rayLength = 8.0f;
-        self.rayMargin = 5.0f;
         self.rayAngle = M_PI / 4;
         self.lineWidth = 2.0f;
         self.speed = 0.08;
@@ -90,18 +88,28 @@
     //[[NSColor whiteColor] set];
     //[[NSBezierPath bezierPathWithRect:dirtyRect] fill];
     
-    [self.color setStroke];
+    self.rayLength = dirtyRect.size.width * (8.0f / 49.0f);
+    self.rayMargin = dirtyRect.size.width * (4.0f / 49.0f);
     
+    [self.color setStroke];
+
     //Draw circle
-    CGFloat circleDiameter = dirtyRect.size.width * 0.3f;
-    CGFloat circleX = (dirtyRect.size.width - circleDiameter) / 2;
-    CGFloat circleY = (dirtyRect.size.height - circleDiameter) / 2;
-    NSRect circleRect = NSMakeRect(circleX, circleY, circleDiameter, circleDiameter);
+    CGFloat circleDiameter = 3 * self.rayMargin;
+    CGFloat effectiveDiameter = 0.0f;
+    if(circleDiameter < 5) {
+        effectiveDiameter = 4.0f;
+        self.lineWidth = 1.25f;
+    } else {
+        effectiveDiameter = circleDiameter;
+    }
+    CGFloat circleX = (dirtyRect.size.width - effectiveDiameter) / 2;
+    CGFloat circleY = (dirtyRect.size.height - effectiveDiameter) / 2;
+    NSRect circleRect = NSMakeRect(circleX, circleY, effectiveDiameter, effectiveDiameter);
     NSBezierPath *circlePath = [NSBezierPath bezierPathWithOvalInRect:circleRect];
     circlePath.lineWidth = self.lineWidth;
     [circlePath stroke];
     
-    NSPoint circleCenter = NSMakePoint(circleX + (circleDiameter / 2), circleY + (circleDiameter / 2));
+    NSPoint circleCenter = NSMakePoint(circleX + (effectiveDiameter / 2), circleY + (effectiveDiameter / 2));
     
     //NSLog(@"Center: %@", NSStringFromPoint(circleCenter));
     //NSLog(@"Diameter: %f", circleDiameter);
